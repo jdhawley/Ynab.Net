@@ -6,7 +6,8 @@ namespace Ynab.Net.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string accessToken = "be3c6d712e2e1938b3172ce8660708f6e9e11786122383bea8606b458cf12909";
+            YnabClient client = new YnabClient(new AccessToken(accessToken));
         }
     }
 }
