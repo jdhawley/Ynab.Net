@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using Xunit;
 
 namespace Ynab.Net.Tests
@@ -20,6 +21,26 @@ namespace Ynab.Net.Tests
             string accessToken = "";
 
             Assert.Throws<ArgumentException>(() => new AccessToken(accessToken));
+        }
+
+        [Fact]
+        public void YnabClient_Constructor_SetsAccessTokenCorrectly()
+        {
+            AccessToken token = new AccessToken("SomeAccessToken");
+            YnabClient client = new YnabClient(token);
+
+            Assert.Equal(token, client.AccessToken);
+        }
+
+        [Fact]
+        public void YnabClient_Constructor_SetsAccessTokenAndHttpClient()
+        {
+            AccessToken token = new AccessToken("SomeAccessToken");
+            IHttpClient httpClient = new HttpClientWrapper();
+            YnabClient client = new YnabClient(token, httpClient);
+
+            Assert.Equal(token, client.AccessToken);
+            Assert.Equal(httpClient, client.HttpClient);
         }
     }
 }
