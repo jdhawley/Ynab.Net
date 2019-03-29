@@ -1,18 +1,29 @@
 using System;
 using System.Net.Http;
 using Xunit;
+using Ynab.Net.Models;
 
 namespace Ynab.Net.Tests
 {
     public class YnabNetTests
     {
+        public string TokenString { get; set; }
+        public AccessToken AccessToken { get; set; }
+        public YnabClient YnabClient { get; set; }
+        public IHttpClientWrapper HttpClientWrapper { get; set; }
+
+        public YnabNetTests()
+        {
+            TokenString = "SomeAccessToken";
+            AccessToken = new AccessToken(TokenString);
+            YnabClient = new YnabClient(AccessToken);
+            HttpClientWrapper = YnabClient.HttpClientWrapper;
+        }
+
         [Fact]
         public void AccessToken_Constructor_SetsAccessTokenCorrectly()
         {
-            string accessToken = "SomeAccessToken";
-            AccessToken token = new AccessToken(accessToken);
-
-            Assert.Equal(accessToken, token.Token);
+            Assert.Equal(TokenString, AccessToken.Token);
         }
 
         [Fact]
@@ -24,23 +35,21 @@ namespace Ynab.Net.Tests
         }
 
         [Fact]
-        public void YnabClient_Constructor_SetsAccessTokenCorrectly()
+        public void YnabClient_Constructor_SetsAccessTokenAndHttpClient()
         {
-            AccessToken token = new AccessToken("SomeAccessToken");
-            YnabClient client = new YnabClient(token);
-
-            Assert.Equal(token, client.AccessToken);
+            Assert.Equal(AccessToken, YnabClient.AccessToken);
+            Assert.Equal(HttpClientWrapper, YnabClient.HttpClientWrapper);
         }
 
         [Fact]
-        public void YnabClient_Constructor_SetsAccessTokenAndHttpClient()
+        public void YnabClient_GetUser_ReturnsUser()
         {
-            AccessToken token = new AccessToken("SomeAccessToken");
-            IHttpClient httpClient = new HttpClientWrapper();
-            YnabClient client = new YnabClient(token, httpClient);
+            YnabClient.HttpClientWrapper = new StubHttpClientWrapper();
+            string user = YnabClient.GetUser();
 
-            Assert.Equal(token, client.AccessToken);
-            Assert.Equal(httpClient, client.HttpClient);
+            //TODO: Make this test mean something.
+            Assert.NotNull(user);
+            Assert.NotEmpty(user);
         }
     }
 }

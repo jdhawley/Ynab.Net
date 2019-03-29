@@ -1,10 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Ynab.Net
 {
-    public class HttpClientWrapper : IHttpClient
+    public class HttpClientWrapper : IHttpClientWrapper
     {
+        private HttpClient _client { get; set; }
+
+        public HttpClientWrapper(string baseAddress, string accessToken)
+        {
+            _client = new HttpClient();
+            _client.BaseAddress = new Uri("https://api.youneedabudget.com/");
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _client.DefaultRequestHeaders.Add("Authorization", "BEARER " + accessToken);
+        }
+
+        public string GetUser()
+        {
+            //HttpResponseMessage response = await _client.GetAsync("/user");
+            //response.EnsureSuccessStatusCode();
+            //return response.Content.ReadAsStringAsync();
+            throw new NotImplementedException();
+        }
     }
 }
