@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Ynab.Net
 {
@@ -21,7 +22,7 @@ namespace Ynab.Net
             HttpClientWrapper = client;
         }
 
-        public string GetUser()
+        public Task<string> GetUser()
         {
             return HttpClientWrapper.GetUser();
         }

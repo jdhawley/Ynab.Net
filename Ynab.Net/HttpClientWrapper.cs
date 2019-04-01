@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Ynab.Net
 {
@@ -17,12 +18,11 @@ namespace Ynab.Net
             _client.DefaultRequestHeaders.Add("Authorization", "BEARER " + accessToken);
         }
 
-        public string GetUser()
+        public async Task<string> GetUser()
         {
-            //HttpResponseMessage response = await _client.GetAsync("/user");
-            //response.EnsureSuccessStatusCode();
-            //return response.Content.ReadAsStringAsync();
-            throw new NotImplementedException();
+            HttpResponseMessage response = await _client.GetAsync("/v1/user");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace Ynab.Net
+﻿using System.Threading.Tasks;
+
+namespace Ynab.Net
 {
     public interface IHttpClientWrapper
     {
-        string GetUser();
+        Task<string> GetUser();
     }
 }
