@@ -1,5 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace Ynab.Net.ConsoleApp
 {
@@ -7,7 +8,13 @@ namespace Ynab.Net.ConsoleApp
     {
         static void Main(string[] args)
         {
-            string accessToken = "be3c6d712e2e1938b3172ce8660708f6e9e11786122383bea8606b458cf12909";
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+
+            string accessToken = configuration.GetSection("personal-access-token").Value;
             YnabClient client = new YnabClient(new AccessToken(accessToken));
             string response = client.GetUser().Result;
             Console.WriteLine(response);
